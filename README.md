@@ -23,5 +23,3 @@ std::string jsonData = query.getResponse();
 // optional save response data to file	
 query.toFile("quotetest2.xml");
 ```
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/kevindhawkins/yqlcpp/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
