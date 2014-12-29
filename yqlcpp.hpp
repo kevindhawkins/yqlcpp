@@ -41,11 +41,11 @@ namespace yqlcpp
     const std::string baseUrl = "http://query.yahooapis.com/v1/public/yql";
     const std::string envCmd = "&env=store://datatables.org/alltableswithkeys";
 
+    enum class yqlformat { JSON, XML };
+
     class yqlquery
     {
     public:
-        
-        enum class yqlformat { JSON, XML };
 
         yqlquery(const std::string& cmd, const yqlformat& format = yqlformat::JSON) : m_command(cmd)
         {
@@ -56,23 +56,7 @@ namespace yqlcpp
         virtual ~yqlquery() { curl_easy_cleanup(m_curl); }
 
         //!< Execute the YQL query.
-        bool execute()
-        {		
-            if (m_curl)
-            {
-                std::string strRequest = "q=" + m_command + envCmd + "&format=" + m_format;
-
-                curl_easy_setopt(m_curl, CURLOPT_URL, baseUrl.c_str());
-                curl_easy_setopt(m_curl, CURLOPT_POST, 1);
-                curl_easy_setopt(m_curl, CURLOPT_POSTFIELDS, strRequest.c_str());
-                curl_easy_setopt(m_curl, CURLOPT_WRITEFUNCTION, responseWriter);
-
-                CURLcode result = curl_easy_perform(m_curl);
-                return (result == CURLE_OK);
-            }
-
-            return false;
-        }
+        bool execute();
 
         //!< Get the YQL query response as a string.
         std::string getResponse() { return (*m_response); }
@@ -100,38 +84,11 @@ namespace yqlcpp
         ///////////////////////////////////////////////////////////////////////
 
         //!<  Writes curl response data to the response string.
-        static size_t responseWriter(char* contents, size_t size, size_t nmemb, std::string* data)
-        {
-            if (data)
-            {
-                size_t realSize = size * nmemb;
-            
-                data->append(contents, realSize);
-                m_response = data;
-
-                return realSize;
-            }
-
-            return 0;
-        }
-
-        ///////////////////////////////////////////////////////////////////////
-
-        std::string formatToStr(const yqlformat& format)
-        {
-            switch(format)
-            {
-            case yqlformat::JSON:
-                return "json";
-            case yqlformat::XML:
-                return "xml";
-            default:
-                return "json";
-            }
-        }
+        static size_t responseWriter(char* contents, size_t size, size_t nmemb, std::string* data);
+        
+        //!< Convert format into string that is used in the query.
+        std::string formatToStr(const yqlformat& format);
     };
-
-    std::string* yqlquery::m_response = NULL;
 
 }
 
