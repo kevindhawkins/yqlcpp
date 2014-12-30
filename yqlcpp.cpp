@@ -64,7 +64,7 @@ namespace yqlcpp
         {
             size_t realSize = size * nmemb;
             
-            data->append(contents, realSize);
+            data->assign(contents, realSize);
             m_response = data;
 
             return realSize;
