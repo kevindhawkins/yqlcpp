@@ -11,6 +11,8 @@ Licensed under the MIT license.
 ##Usage
 
 ```
+#include "yqlcpp.hpp"
+
 // query setup, optional parameter to specify JSON/XML defaulting to JSON
 yqlcpp::yqlquery query("select * from yahoo.finance.quotes where symbol='AAPL'");
 
@@ -21,5 +23,5 @@ query.execute();
 std::string jsonData = query.getResponse();
 	
 // optional save response data to file	
-query.toFile("quotetest2.xml");
+query.toFile("aaplquote.json");
 ```
