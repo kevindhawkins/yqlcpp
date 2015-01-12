@@ -42,6 +42,7 @@ namespace yqlcpp
     {		
         if (m_curl)
         {
+            m_response.clear();
             std::string strRequest = "q=" + m_command + envCmd + "&format=" + m_format;
 
             curl_easy_setopt(m_curl, CURLOPT_URL, baseUrl.c_str());
