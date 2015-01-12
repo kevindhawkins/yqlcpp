@@ -33,7 +33,7 @@
 
 namespace yqlcpp
 {
-	std::string* yqlquery::m_response = NULL;
+	std::string yqlquery::m_response = std::string("");
 
     ///////////////////////////////////////////////////////////////////////
 
@@ -65,7 +65,7 @@ namespace yqlcpp
             size_t realSize = size * nmemb;
             
             data->assign(contents, realSize);
-            m_response = data;
+            m_response.append(*data);
 
             return realSize;
         }

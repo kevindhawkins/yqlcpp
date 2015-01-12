@@ -59,15 +59,15 @@ namespace yqlcpp
         bool execute();
 
         //!< Get the YQL query response as a string.
-        std::string getResponse() { return (*m_response); }
+        std::string getResponse() { return m_response; }
 
         //!< Write the YQL response to a file.
         void toFile(const std::string& filename)
         {
-            if (m_response)
+            if (m_response.length())
             {
                 std::ofstream out(filename);
-                out << (*m_response);
+                out << m_response;
                 out.close();
             }
         }
@@ -79,7 +79,7 @@ namespace yqlcpp
         std::string m_command;		//!< Query command sent to YQL.
         std::string m_format;		//!< Format of the response data.
 
-        static std::string* m_response;		//!< Response data, provided and managed by curl.
+        static std::string m_response;		//!< Response data, provided and managed by curl.
 
         ///////////////////////////////////////////////////////////////////////
 
