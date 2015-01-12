@@ -33,8 +33,6 @@
 
 namespace yqlcpp
 {
-	std::string yqlquery::m_response = std::string("");
-
     ///////////////////////////////////////////////////////////////////////
 
     //!< Execute the YQL query.
@@ -43,12 +41,13 @@ namespace yqlcpp
         if (m_curl)
         {
             m_response.clear();
-            std::string strRequest = "q=" + m_command + envCmd + "&format=" + m_format;
+            std::string strRequest = "q=" + m_command + envCmd + "&format=" + formatToStr(m_format);
 
             curl_easy_setopt(m_curl, CURLOPT_URL, baseUrl.c_str());
             curl_easy_setopt(m_curl, CURLOPT_POST, 1);
             curl_easy_setopt(m_curl, CURLOPT_POSTFIELDS, strRequest.c_str());
             curl_easy_setopt(m_curl, CURLOPT_WRITEFUNCTION, responseWriter);
+            curl_easy_setopt(m_curl, CURLOPT_WRITEDATA, &m_response);
 
             CURLcode result = curl_easy_perform(m_curl);
             return (result == CURLE_OK);
@@ -59,14 +58,12 @@ namespace yqlcpp
 
     ///////////////////////////////////////////////////////////////////////
 
-	size_t yqlquery::responseWriter(char* contents, size_t size, size_t nmemb, std::string* data)
+    size_t yqlquery::responseWriter(char* contents, size_t size, size_t nmemb, std::string* data)
     {
         if (data)
         {
             size_t realSize = size * nmemb;
-            
-            data->assign(contents, realSize);
-            m_response.append(*data);
+            data->append(contents, realSize);
 
             return realSize;
         }

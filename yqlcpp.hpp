@@ -49,11 +49,10 @@ namespace yqlcpp
 
         yqlquery(const std::string& cmd, const yqlformat& format = yqlformat::JSON) : m_command(cmd)
         {
-            m_curl = curl_easy_init(); 
-            m_format = formatToStr(format);
+            m_curl = curl_easy_init();
         }
 
-        virtual ~yqlquery() { curl_easy_cleanup(m_curl); }
+        virtual ~yqlquery() { curl_easy_cleanup(m_curl); m_curl = NULL; }
 
         //!< Execute the YQL query.
         bool execute();
@@ -75,11 +74,11 @@ namespace yqlcpp
     private:
         yqlquery() {}
 
-        CURL* m_curl;				//!< Our curl handle.
-        std::string m_command;		//!< Query command sent to YQL.
-        std::string m_format;		//!< Format of the response data.
+        CURL*       m_curl;			//!< Our curl handle.
+        yqlformat   m_format;		//!< Format of the response data.
 
-        static std::string m_response;		//!< Response data, provided and managed by curl.
+        std::string m_command;		//!< Query command sent to YQL.
+        std::string m_response;		//!< Response data, provided and managed by curl.
 
         ///////////////////////////////////////////////////////////////////////
 
