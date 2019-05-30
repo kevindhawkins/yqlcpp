@@ -8,7 +8,7 @@ checking and no concern for thread safety. Built on top of and requires libcurl.
 
 Licensed under the MIT license.
 
-##Usage
+## Usage
 
 ```
 #include "yqlcpp.hpp"
